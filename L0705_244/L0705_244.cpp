@@ -3,7 +3,7 @@
 
 graph::graph(int n, bool dir) 
     : nvertices(n), nedges(0), directed(dir), edges(n + 1), degree(n + 1, 0) {
-    // Индексы от 1 до n (как в оригинальном коде)
+    // Индексы от 1 до n
 }
 
 void graph::insert_edge(int x, int y, bool directed, int weight) {

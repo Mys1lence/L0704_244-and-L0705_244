@@ -1,4 +1,3 @@
-# Простой Makefile для L0705_244
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall
 TARGET = L0705_244_test

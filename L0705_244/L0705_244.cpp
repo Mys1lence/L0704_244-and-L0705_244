@@ -1,37 +1,34 @@
 #include "L0705_244.hpp"
-#include <iostream>
 
-graph::graph(int n, bool dir) 
-    : nvertices(n), nedges(0), directed(dir), edges(n + 1), degree(n + 1, 0) {
-    // Индексы от 1 до n
-}
+// Реализация функции вставки ребра
+void insert_edge(Graph* g, int x, int y, bool directed) {
+    EdgeNode* p = new EdgeNode;
+    p->weight = 0; // ваш исходный код
+    p->y = y;
+    p->next = g->edges[x];
+    g->edges[x] = p;
+    g->degree[x]++;
 
-void graph::insert_edge(int x, int y, bool directed, int weight) {
-    // Создание нового ребра
-    auto new_edge = std::make_unique<edgenode>(y, weight);
-    new_edge->next = std::move(edges[x]);
-    edges[x] = std::move(new_edge);
-    degree[x]++;
-    nedges++;
-    
-    // Для неориентированного графа добавляем обратное ребро
     if (!directed) {
-        insert_edge(y, x, true, weight);
+        insert_edge(g, y, x, true);
+    } else {
+        g->nedges++;
     }
 }
 
-void graph::print_graph() const {
-    std::cout << "Граф (" << (directed ? "ориентированный" : "неориентированный") 
-              << "): " << nvertices << " вершин, " << nedges << " ребер\n";
-    
-    for (int i = 1; i <= nvertices; i++) {
-        std::cout << i << ": ";
-        edgenode* p = edges[i].get();
-        
-        while (p != nullptr) {
+// Реализация функции вывода графа
+void print_graph(const Graph* g) {
+    int i;                 // Счетчик
+    EdgeNode* p;           // Временный указатель
+
+    for (i = 1; i <= g->nvertices; i++) {
+        std::cout << i << ": "; // Выводим вершину
+        p = g->edges[i];
+
+        while (p != nullptr) {  // Перебираем все смежные вершины
             std::cout << " " << p->y;
-            p = p->next.get();
+            p = p->next;
         }
-        std::cout << std::endl;
+        std::cout << std::endl; // Переход на новую строку
     }
 }

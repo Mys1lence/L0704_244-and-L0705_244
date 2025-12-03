@@ -16,7 +16,6 @@ struct Graph {
     std::vector<EdgeNode*> edges;
     std::vector<int> degree;
 
-    // Конструктор
     Graph(int n) : nvertices(n), nedges(0), edges(n, nullptr), degree(n, 0) {}
     ~Graph() {
         for (auto edge : edges) {
@@ -29,7 +28,6 @@ struct Graph {
     }
 };
 
-// Объявление функции вставки ребра
 void insert_edge(Graph* g, int x, int y, bool directed);
 
 #endif // L0704_244_HPP

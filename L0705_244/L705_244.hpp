@@ -1,34 +1,36 @@
-#include "L0705_244.hpp"
+#ifndef L0705_244_HPP
+#define L0705_244_HPP
 
-// Реализация функции вставки ребра
-void insert_edge(Graph* g, int x, int y, bool directed) {
-    EdgeNode* p = new EdgeNode;
-    p->weight = 0; // ваш исходный код
-    p->y = y;
-    p->next = g->edges[x];
-    g->edges[x] = p;
-    g->degree[x]++;
+#include <vector>
 
-    if (!directed) {
-        insert_edge(g, y, x, true);
-    } else {
-        g->nedges++;
-    }
-}
+struct EdgeNode {
+    int y;
+    int weight;
+    EdgeNode* next;
+};
 
-// Реализация функции вывода графа
-void print_graph(const Graph* g) {
-    int i;                 // Счетчик
-    EdgeNode* p;           // Временный указатель
+struct Graph {
+    int nvertices;
+    int nedges;
+    bool directed;
+    std::vector<EdgeNode*> edges;
+    std::vector<int> degree;
 
-    for (i = 1; i <= g->nvertices; i++) {
-        std::cout << i << ": "; // Выводим вершину
-        p = g->edges[i];
-
-        while (p != nullptr) {  // Перебираем все смежные вершины
-            std::cout << " " << p->y;
-            p = p->next;
+    // Конструктор
+    Graph(int n) : nvertices(n), nedges(0), edges(n + 1, nullptr), degree(n + 1, 0) {}
+    ~Graph() {
+        for (auto edge : edges) {
+            while (edge) {
+                EdgeNode* temp = edge;
+                edge = edge->next;
+                delete temp;
+            }
         }
-        std::cout << std::endl; // Переход на новую строку
     }
-}
+};
+
+// Объявление функций
+void insert_edge(Graph* g, int x, int y, bool directed);
+void print_graph(const Graph* g);
+
+#endif // L0705_244_HPP

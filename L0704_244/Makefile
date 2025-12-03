@@ -1,34 +1,32 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -pedantic -g
-TARGET = L0704_244_test
-SOURCES = L0704_244.cpp test_L0704_244.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
-HEADERS = L0704_244.hpp
+CXXFLAGS = -I"."
 
-$(TARGET): $(OBJECTS)
- $(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+ifeq ($(OS),Windows_NT)
+	RM = del /Q
+	EXT = .exe
+else
+	RM = rm -f
+	EXT =
+endif
 
-%.o: %.cpp $(HEADERS)
- $(CXX) $(CXXFLAGS) -c $< -o $@
+TARGET = L0704_244$(EXT)
 
+OBJ = main.o L0704_244.o
+
+$(TARGET): $(OBJ)
+	$(CXX) -o $@ $^
+
+main.o: test_L0704_244.cpp L0704_244.hpp
+	$(CXX) $(CXXFLAGS) -c test_L0704_244.cpp
+
+L0704_244.o: L0704_244.cpp L0704_244.hpp
+	$(CXX) $(CXXFLAGS) -c L0704_244.cpp
+
+.PHONY: clean run all
 clean:
- rm -f $(TARGET) $(OBJECTS)
+	$(RM) $(OBJ) $(TARGET)
 
-test: $(TARGET)
- ./$(TARGET)
+run:
+	./$(TARGET)
 
-release: CXXFLAGS += -O2 -DNDEBUG
-release: clean $(TARGET)
-
-# Отладочная сборка
-debug: CXXFLAGS += -DDEBUG -O0
-debug: clean $(TARGET)
-
-# Проверка стиля кода
-check:
- cppcheck --enable=all --suppress=missingIncludeSystem $(SOURCES) $(HEADERS)
-
-archive:
- tar -czf L0704_244_project.tar.gz $(SOURCES) $(HEADERS) Makefile
-
-.PHONY: clean test release debug check archive
+all: $(TARGET)
